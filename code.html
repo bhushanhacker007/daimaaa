@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daimaa | The Sacred Choice of Nurture</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#f3bf37",
+                    "on-primary-container": "#fffcff",
+                    "surface-dim": "#ded9d4",
+                    "on-surface": "#1d1b19",
+                    "on-surface-variant": "#55433e",
+                    "surface": "#fef8f3",
+                    "primary-fixed-dim": "#ffb59f",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#725951",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#58413b",
+                    "on-secondary": "#ffffff",
+                    "surface-container-low": "#f8f3ee",
+                    "inverse-primary": "#ffb59f",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e6e2dd",
+                    "outline": "#88726d",
+                    "surface-tint": "#96472f",
+                    "on-background": "#1d1b19",
+                    "background": "#fef8f3",
+                    "outline-variant": "#dac1ba",
+                    "on-tertiary-container": "#fffbff",
+                    "surface-container": "#f2ede8",
+                    "secondary-container": "#fad8cf",
+                    "inverse-surface": "#32302d",
+                    "on-tertiary-fixed-variant": "#5a4300",
+                    "tertiary-container": "#936f00",
+                    "on-primary-fixed-variant": "#78311a",
+                    "surface-container-high": "#ece7e2",
+                    "on-secondary-fixed": "#291712",
+                    "primary-container": "#b25d43",
+                    "primary-fixed": "#ffdbd1",
+                    "on-primary": "#ffffff",
+                    "primary": "#93452d",
+                    "tertiary-fixed": "#ffdf9a",
+                    "surface-bright": "#fef8f3",
+                    "on-primary-fixed": "#3a0a00",
+                    "on-secondary-container": "#765d55",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#755700",
+                    "secondary-fixed-dim": "#e0bfb6",
+                    "surface-variant": "#e6e2dd",
+                    "inverse-on-surface": "#f5f0eb",
+                    "on-tertiary-fixed": "#251a00",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#fddbd1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .split-hero-left {
+            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCoCyamNusOHkzs-A-GUna02_RW5yW_x3L8WgB3HdE0SuVWoFZHjcfEwBdTYYMXwUY2PDXTfDKsWxdDTY7LUTSaAS8Tfm8JzZMCRHr0bAAHNxja5Q_vmlTUEQKH-uLlD1tOz5qbfpLcTp20bS9-5qA6wxTT_EiV-6fBJ1sqdAqWrg3yvGSfn6jiUkEbJD_FDrWR53zIfFLeUAr9MfBtv8xVxCoAj3oUMMIYxnpyB08CqrkkHE0z77oEC_mqN7Dp6JUG7EMI8nMuyclW');
+            background-size: cover;
+            background-position: center;
+        }
+        .split-hero-right {
+            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBU_wPjBhJnU-BWxL-55ElqksATgRvmk2zGEsvX8VQFGsfw8JX6_qxI7zgSZjyikNf3YWFfSWuMz1mAOpz85smLt8gEj7x55-EDCZ1b3UOn8y31e2r4H-dDtbnCvb3D1k85qvwlLocsy2zZIyxU1Ye9P1fGsTjxLnGnFmCV4IEGu7J2R7mu09kEPZvh8Evu687RLe03c3AlASf-VX2KfJG7_aHqaww6HmoBlJEfDObZqhGnQiUK4WDp2flIhsX4YBLBkH6P3Npq3e6k');
+            background-size: cover;
+            background-position: center;
+        }
+        .dual-overlay {
+            background: linear-gradient(to bottom, rgba(147, 69, 45, 0.4), rgba(147, 69, 45, 0.8));
+        }
+        .dual-overlay-light {
+            background: linear-gradient(to bottom, rgba(254, 248, 243, 0.4), rgba(254, 248, 243, 0.9));
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed-dim selection:text-on-primary-fixed leading-[1.6]">
+<nav class="fixed top-0 w-full z-[100] bg-[#fef8f3]/80 backdrop-blur-md border-b border-outline-variant/20">
+<div class="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-2">
+<img alt="Daimaa Logo" class="h-10 w-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBew7Xpi3eqII_boLgELLibYnEjXyQum0HBA8bJ7KepEL83jhn97ec5M5KIrux-LXQ0ww_HGd6TpmbByE-lSdK6-xob2dnNpXZQaEnwBEMPFF7MRkK9dJ9cQL6kA7Q3RE7ySvYXi0M9gL5LHZROawlAawtrocteTxtOiphrpSpvQlsExEFI_hPinGc1l_7fUnyKYncqhl5OdlRLCzkKg0ZCzKHUF_GjK9Zw1wAiZo3DbXhMc19JSFcDc0cEhyK3d9U6PkEYeGBHwbDw"/>
+<span class="text-2xl font-serif tracking-tight text-[#93452d]">Daimaa</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-[#725951] font-medium hover:text-primary transition-colors" href="#mothers">Seek Care</a>
+<a class="text-[#725951] font-medium hover:text-primary transition-colors" href="#daimaas">Join the Collective</a>
+<a class="bg-primary text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-primary-container hover:text-on-primary-container transition-all" href="#">Enter the Hub</a>
+</div>
+</div>
+</nav>
+<section class="h-screen w-full flex flex-col md:flex-row overflow-hidden pt-16">
+<a class="group relative flex-1 overflow-hidden transition-all duration-700 hover:flex-[1.5] border-b md:border-b-0 md:border-r border-surface-variant" href="#mothers">
+<div class="absolute inset-0 split-hero-left grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"></div>
+<div class="absolute inset-0 dual-overlay-light group-hover:opacity-0 transition-opacity duration-700"></div>
+<div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-700"></div>
+<div class="relative h-full flex flex-col items-center justify-center p-12 text-center">
+<span class="text-primary font-bold tracking-[0.3em] uppercase mb-4 text-xs">For Mothers</span>
+<h2 class="text-4xl md:text-6xl font-headline font-bold text-primary mb-6">Seek Nurturing Care</h2>
+<p class="text-secondary max-w-sm text-lg italic opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
+                A sanctuary of touch, tradition, and timeless wisdom for your sacred transition.
+            </p>
+<div class="mt-8 px-8 py-3 rounded-full border border-primary text-primary font-bold group-hover:bg-primary group-hover:text-white transition-all">
+                Enter the Sanctuary
+            </div>
+</div>
+</a>
+<a class="group relative flex-1 overflow-hidden transition-all duration-700 hover:flex-[1.5]" href="#daimaas">
+<div class="absolute inset-0 split-hero-right grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"></div>
+<div class="absolute inset-0 dual-overlay group-hover:opacity-30 transition-opacity duration-700"></div>
+<div class="relative h-full flex flex-col items-center justify-center p-12 text-center text-white">
+<span class="text-primary-fixed font-bold tracking-[0.3em] uppercase mb-4 text-xs">For Caregivers</span>
+<h2 class="text-4xl md:text-6xl font-headline font-bold mb-6">Answer the Call</h2>
+<p class="text-primary-fixed max-w-sm text-lg italic opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
+                Join a lineage of healers. Transform lives through the art of professional nurturing.
+            </p>
+<div class="mt-8 px-8 py-3 rounded-full border border-white text-white font-bold group-hover:bg-white group-hover:text-primary transition-all">
+                Join the Collective
+            </div>
+</div>
+</a>
+</section>
+<section class="py-32 bg-surface" id="mothers">
+<div class="max-w-4xl mx-auto px-8 text-center space-y-16">
+<div class="space-y-6">
+<span class="material-symbols-outlined text-primary text-4xl">flare</span>
+<h2 class="text-5xl font-headline font-bold text-primary italic leading-tight">The Sacred 40 Days</h2>
+<p class="text-2xl text-secondary font-light leading-relaxed">
+                In the echo of birth, find the melody of restoration. <br/>
+                We weave the ancient threads of touch to shield your spirit <br/>
+                and anchor the bond that defines a lifetime.
+            </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 pt-12">
+<div class="space-y-4">
+<div class="h-40 rounded-full overflow-hidden mb-6">
+<img class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsDcKix94kzdZQayHRDiQEKIKXK56KoNxMUBJOrWiHq77pBavSdj5XLyn9HqB6AB7_cGn-bejJuvgwM4bRctU9BQuPEftTGSEe5MZQx5PRhWYi8BZ8vad1u_-zJuyj-EU_OEvspCkS2h4fAMo_s4KLTeYDNVvz_oDQtxH3UqqFg1srCTJWvK9LsPhfPUAIh7-DtOECp9CU0VpQoojoqLBosW76iBuUNH8DD7pUroxO9d9ufU8FWkYiTOF6fQg811u_gTm5MWJ_voeG"/>
+</div>
+<h4 class="font-headline font-bold text-primary italic">Gentle Grounding</h4>
+<p class="text-secondary text-sm">Restoring the mother's core energy through rhythmic ritual.</p>
+</div>
+<div class="space-y-4">
+<div class="h-40 rounded-full overflow-hidden mb-6">
+<img class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm_ftL8bK7r4ZX3rlZbjZdXOkdRYge8c_2vNNY0t1Qb4JWjxW6CiySMgvDTDiNNa4QAe0DDy6je_6rP2fE6rlA-d8BhLRzCTR3uTPOmm9YThL941c_m0L7_0ORSGOTHdu0--EwYpl0T6mUjFSksChYnFj1WOLFQPso5Hmb6AR1FMAdQ1fQFNV2hwmngygve0NdXtJAvmxH95s-X_3dcK_5nn-8Uk-Hd_3HozfBeDazIpXLqyBUc8TK-mkbSlM_qFJWnSLHMAYb3TQ5"/>
+</div>
+<h4 class="font-headline font-bold text-primary italic">Soulful Whisper</h4>
+<p class="text-secondary text-sm">A soft welcome for the newborn, spoke through the hands of a Daimaa.</p>
+</div>
+<div class="space-y-4">
+<div class="h-40 rounded-full overflow-hidden mb-6">
+<img class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkYEEiC65Dc0lCcta8MVQ0fObaF7Sv8JJ9xVEpZBUoIp0NUQvsdLn-15WJu_dH6_sbS3PgptGyEu8_aW5qGj5YP0ZSLkk1BY5fqn0aOXbi3Fk-n6_n2hwWopoQg_mdbMedjKa_aGyKNiG3HM7bPTNP1xqjPoqxFcyXs75-cPR9eKp6ctbLsk1dqu9sG9pwoIX_K0w7B1SVPNeqqSiPPADWwPyfS3Txj_yr28MZjBcflPAe4tNeR2p2phlTKdVUnuIgnTZ1HqCNHzHo"/>
+</div>
+<h4 class="font-headline font-bold text-primary italic">Ancestral Cradle</h4>
+<p class="text-secondary text-sm">Enveloping your home in the comfort of generations.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-surface-container-high border-y border-outline-variant/30" id="daimaas">
+<div class="container mx-auto px-8">
+<div class="flex flex-col lg:flex-row gap-20 items-center mb-24">
+<div class="lg:w-1/2 space-y-8">
+<h2 class="text-5xl md:text-6xl font-headline font-bold text-primary">A Legacy of Care, A Future of Impact.</h2>
+<p class="text-xl text-secondary leading-relaxed">
+                    Daimaa is not just a profession; it's a sacred vocation. We are building the world's most prestigious collective of traditional maternal practitioners. By joining us, you gain access to a platform that values your wisdom, supports your growth, and connects you with families seeking the deepest level of care.
+                </p>
+<div class="flex flex-wrap gap-8">
+<div>
+<div class="text-4xl font-headline font-bold text-primary">500+</div>
+<div class="text-sm uppercase tracking-widest text-secondary mt-1">Certified Daimaas</div>
+</div>
+<div>
+<div class="text-4xl font-headline font-bold text-tertiary">12,000+</div>
+<div class="text-sm uppercase tracking-widest text-secondary mt-1">Families Nurtured</div>
+</div>
+<div>
+<div class="text-4xl font-headline font-bold text-secondary">98%</div>
+<div class="text-sm uppercase tracking-widest text-secondary mt-1">Renewal Rate</div>
+</div>
+</div>
+</div>
+<div class="lg:w-1/2 grid grid-cols-2 gap-4">
+<div class="space-y-4">
+<img class="w-full aspect-square object-cover rounded-3xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU_wPjBhJnU-BWxL-55ElqksATgRvmk2zGEsvX8VQFGsfw8JX6_qxI7zgSZjyikNf3YWFfSWuMz1mAOpz85smLt8gEj7x55-EDCZ1b3UOn8y31e2r4H-dDtbnCvb3D1k85qvwlLocsy2zZIyxU1Ye9P1fGsTjxLnGnFmCV4IEGu7J2R7mu09kEPZvh8Evu687RLe03c3AlASf-VX2KfJG7_aHqaww6HmoBlJEfDObZqhGnQiUK4WDp2flIhsX4YBLBkH6P3Npq3e6k"/>
+<div class="bg-primary p-6 rounded-3xl text-white">
+<p class="italic text-sm">"At Daimaa, I found a community that finally treats our traditional knowledge with the dignity it deserves."</p>
+<p class="mt-4 font-bold">— Savita B., Senior Daimaa</p>
+</div>
+</div>
+<div class="space-y-4 pt-12">
+<div class="bg-tertiary-container p-6 rounded-3xl text-on-tertiary-container">
+<h4 class="font-bold mb-2">Continuous Growth</h4>
+<p class="text-sm">Workshops in modern neonatology and sacred ritual.</p>
+</div>
+<img class="w-full aspect-[3/4] object-cover rounded-3xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkYEEiC65Dc0lCcta8MVQ0fObaF7Sv8JJ9xVEpZBUoIp0NUQvsdLn-15WJu_dH6_sbS3PgptGyEu8_aW5qGj5YP0ZSLkk1BY5fqn0aOXbi3Fk-n6_n2hwWopoQg_mdbMedjKa_aGyKNiG3HM7bPTNP1xqjPoqxFcyXs75-cPR9eKp6ctbLsk1dqu9sG9pwoIX_K0w7B1SVPNeqqSiPPADWwPyfS3Txj_yr28MZjBcflPAe4tNeR2p2phlTKdVUnuIgnTZ1HqCNHzHo"/>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-surface p-10 rounded-[3rem] border border-outline-variant/30 hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-4xl text-primary mb-6">diversity_2</span>
+<h3 class="text-2xl font-headline font-bold text-primary mb-4">The Collective Hub</h3>
+<p class="text-secondary mb-8">Access a private network of peers for support, case study sharing, and cultural exchange.</p>
+<a class="inline-flex items-center gap-2 font-bold text-primary group-hover:gap-4 transition-all" href="#">Explore the Hub <span class="material-symbols-outlined">arrow_forward</span></a>
+</div>
+<div class="bg-surface p-10 rounded-[3rem] border border-outline-variant/30 hover:border-tertiary transition-all group">
+<span class="material-symbols-outlined text-4xl text-tertiary mb-6">auto_stories</span>
+<h3 class="text-2xl font-headline font-bold text-primary mb-4">Lineage Learning</h3>
+<p class="text-secondary mb-8">Master advanced techniques in traditional massage, herbal oils, and postpartum nourishment.</p>
+<a class="inline-flex items-center gap-2 font-bold text-tertiary group-hover:gap-4 transition-all" href="#">View Curriculum <span class="material-symbols-outlined">arrow_forward</span></a>
+</div>
+<div class="bg-surface p-10 rounded-[3rem] border border-outline-variant/30 hover:border-secondary transition-all group">
+<span class="material-symbols-outlined text-4xl text-secondary mb-6">verified</span>
+<h3 class="text-2xl font-headline font-bold text-primary mb-4">Professional Dignity</h3>
+<p class="text-secondary mb-8">Competitive compensation, structured schedules, and global recognition for your craft.</p>
+<a class="inline-flex items-center gap-2 font-bold text-secondary group-hover:gap-4 transition-all" href="#">Apply to Join <span class="material-symbols-outlined">arrow_forward</span></a>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-white overflow-hidden">
+<div class="container mx-auto px-8">
+<div class="flex flex-col md:flex-row items-center justify-between mb-16 gap-8">
+<h2 class="text-4xl font-headline font-bold text-primary">Nurture in Motion</h2>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-4">
+<img class="w-12 h-12 rounded-full border-2 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0mVVlahSx0ecHUEdaspUYl1aiop4XKJHTohbMbahyZ_4YfZloHTs2bXCoqyz9tFUVZLJ5s421qj2buWwzEyZY11pkLuLp6odkKbZyOMEWoCxugl8Q12unQefDTKmUagIBKVSs8BbnCYNhHYgJOMMeabxdJnqh2nmhc07YnMsegNRgcu5kQWxdYWMB_gT_szS1KWxM2aNSmDL1NjlYpZe2v9QFtTANb7XrCpsb6LvipC-WoIoTLxYVn_TfqBAQEWEo4CqebIYTyTPT"/>
+<img class="w-12 h-12 rounded-full border-2 border-white object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBew7Xpi3eqII_boLgELLibYnEjXyQum0HBA8bJ7KepEL83jhn97ec5M5KIrux-LXQ0ww_HGd6TpmbByE-lSdK6-xob2dnNpXZQaEnwBEMPFF7MRkK9dJ9cQL6kA7Q3RE7ySvYXi0M9gL5LHZROawlAawtrocteTxtOiphrpSpvQlsExEFI_hPinGc1l_7fUnyKYncqhl5OdlRLCzkKg0ZCzKHUF_GjK9Zw1wAiZo3DbXhMc19JSFcDc0cEhyK3d9U6PkEYeGBHwbDw"/>
+</div>
+<span class="text-sm font-medium text-secondary">Join 2,000+ active members this month</span>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<img class="w-full h-64 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoCyamNusOHkzs-A-GUna02_RW5yW_x3L8WgB3HdE0SuVWoFZHjcfEwBdTYYMXwUY2PDXTfDKsWxdDTY7LUTSaAS8Tfm8JzZMCRHr0bAAHNxja5Q_vmlTUEQKH-uLlD1tOz5qbfpLcTp20bS9-5qA6wxTT_EiV-6fBJ1sqdAqWrg3yvGSfn6jiUkEbJD_FDrWR53zIfFLeUAr9MfBtv8xVxCoAj3oUMMIYxnpyB08CqrkkHE0z77oEC_mqN7Dp6JUG7EMI8nMuyclW"/>
+<img class="w-full h-64 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700 mt-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsDcKix94kzdZQayHRDiQEKIKXK56KoNxMUBJOrWiHq77pBavSdj5XLyn9HqB6AB7_cGn-bejJuvgwM4bRctU9BQuPEftTGSEe5MZQx5PRhWYi8BZ8vad1u_-zJuyj-EU_OEvspCkS2h4fAMo_s4KLTeYDNVvz_oDQtxH3UqqFg1srCTJWvK9LsPhfPUAIh7-DtOECp9CU0VpQoojoqLBosW76iBuUNH8DD7pUroxO9d9ufU8FWkYiTOF6fQg811u_gTm5MWJ_voeG"/>
+<img class="w-full h-64 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkYEEiC65Dc0lCcta8MVQ0fObaF7Sv8JJ9xVEpZBUoIp0NUQvsdLn-15WJu_dH6_sbS3PgptGyEu8_aW5qGj5YP0ZSLkk1BY5fqn0aOXbi3Fk-n6_n2hwWopoQg_mdbMedjKa_aGyKNiG3HM7bPTNP1xqjPoqxFcyXs75-cPR9eKp6ctbLsk1dqu9sG9pwoIX_K0w7B1SVPNeqqSiPPADWwPyfS3Txj_yr28MZjBcflPAe4tNeR2p2phlTKdVUnuIgnTZ1HqCNHzHo"/>
+<img class="w-full h-64 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700 mt-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU_wPjBhJnU-BWxL-55ElqksATgRvmk2zGEsvX8VQFGsfw8JX6_qxI7zgSZjyikNf3YWFfSWuMz1mAOpz85smLt8gEj7x55-EDCZ1b3UOn8y31e2r4H-dDtbnCvb3D1k85qvwlLocsy2zZIyxU1Ye9P1fGsTjxLnGnFmCV4IEGu7J2R7mu09kEPZvh8Evu687RLe03c3AlASf-VX2KfJG7_aHqaww6HmoBlJEfDObZqhGnQiUK4WDp2flIhsX4YBLBkH6P3Npq3e6k"/>
+</div>
+</div>
+</section>
+<footer class="bg-surface-container-highest py-16">
+<div class="container mx-auto px-8 max-w-screen-xl">
+<div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+<div class="max-w-xs">
+<div class="flex items-center gap-2 mb-6">
+<img alt="Daimaa Logo" class="h-8 w-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0mVVlahSx0ecHUEdaspUYl1aiop4XKJHTohbMbahyZ_4YfZloHTs2bXCoqyz9tFUVZLJ5s421qj2buWwzEyZY11pkLuLp6odkKbZyOMEWoCxugl8Q12unQefDTKmUagIBKVSs8BbnCYNhHYgJOMMeabxdJnqh2nmhc07YnMsegNRgcu5kQWxdYWMB_gT_szS1KWxM2aNSmDL1NjlYpZe2v9QFtTANb7XrCpsb6LvipC-WoIoTLxYVn_TfqBAQEWEo4CqebIYTyTPT"/>
+<span class="text-xl font-serif text-primary">Daimaa</span>
+</div>
+<p class="text-secondary text-sm">Where ancient wisdom meets modern purpose. A dual path for those who seek care and those who give it.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+<div>
+<h5 class="font-bold text-primary text-sm uppercase tracking-widest mb-4">Mother</h5>
+<ul class="space-y-2 text-sm text-secondary">
+<li><a class="hover:text-primary" href="#">Our Services</a></li>
+<li><a class="hover:text-primary" href="#">The 40-Day Ritual</a></li>
+<li><a class="hover:text-primary" href="#">Book a Consultation</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-primary text-sm uppercase tracking-widest mb-4">Daimaa</h5>
+<ul class="space-y-2 text-sm text-secondary">
+<li><a class="hover:text-primary" href="#">Join the Collective</a></li>
+<li><a class="hover:text-primary" href="#">Certification</a></li>
+<li><a class="hover:text-primary" href="#">Daimaa Hub Login</a></li>
+</ul>
+</div>
+<div class="col-span-2 md:col-span-1">
+<h5 class="font-bold text-primary text-sm uppercase tracking-widest mb-4">Connect</h5>
+<ul class="space-y-2 text-sm text-secondary">
+<li>nurture@daimaa.com</li>
+<li>Mumbai, MH, India</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-secondary/60">
+<p>© 2024 Daimaa. Traditional Wisdom. Professional Nurture.</p>
+<div class="flex gap-6">
+<a href="#">Privacy</a>
+<a href="#">Terms</a>
+<a href="#">Heritage</a>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>
