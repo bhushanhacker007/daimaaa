@@ -22,7 +22,13 @@ class ManageServices extends Component
     public int $categoryId = 0;
     public int $durationMinutes = 60;
     public string $basePrice = '';
+    public string $pricePerHour = '';
+    public string $minHours = '1.0';
+    public string $maxHours = '8.0';
+    public string $hourIncrement = '0.5';
     public string $icon = 'spa';
+    public bool $instantAvailable = false;
+    public string $instantSurcharge = '0';
     public bool $isActive = true;
 
     protected function rules(): array
@@ -33,6 +39,9 @@ class ManageServices extends Component
             'categoryId' => 'required|exists:service_categories,id',
             'durationMinutes' => 'required|integer|min:15',
             'basePrice' => 'required|numeric|min:0',
+            'pricePerHour' => 'nullable|numeric|min:0',
+            'minHours' => 'nullable|numeric|min:0.5|max:24',
+            'maxHours' => 'nullable|numeric|min:0.5|max:24',
         ];
     }
 
@@ -54,7 +63,13 @@ class ManageServices extends Component
             'category_id' => $this->categoryId,
             'duration_minutes' => $this->durationMinutes,
             'base_price' => $this->basePrice,
+            'price_per_hour' => $this->pricePerHour !== '' ? $this->pricePerHour : null,
+            'min_hours' => $this->pricePerHour !== '' ? $this->minHours : 1.0,
+            'max_hours' => $this->pricePerHour !== '' ? $this->maxHours : 8.0,
+            'hour_increment' => $this->pricePerHour !== '' ? $this->hourIncrement : 0.5,
             'icon' => $this->icon,
+            'instant_available' => $this->instantAvailable,
+            'instant_surcharge' => $this->instantAvailable ? ($this->instantSurcharge ?: 0) : 0,
             'is_active' => $this->isActive,
         ];
 
@@ -78,7 +93,13 @@ class ManageServices extends Component
         $this->categoryId = $s->category_id;
         $this->durationMinutes = $s->duration_minutes;
         $this->basePrice = (string) $s->base_price;
+        $this->pricePerHour = $s->price_per_hour ? (string) $s->price_per_hour : '';
+        $this->minHours = (string) ($s->min_hours ?? '1.0');
+        $this->maxHours = (string) ($s->max_hours ?? '8.0');
+        $this->hourIncrement = (string) ($s->hour_increment ?? '0.5');
         $this->icon = $s->icon ?? 'spa';
+        $this->instantAvailable = $s->instant_available ?? false;
+        $this->instantSurcharge = (string) ($s->instant_surcharge ?? '0');
         $this->isActive = $s->is_active;
         $this->showForm = true;
     }
@@ -98,9 +119,12 @@ class ManageServices extends Component
     {
         $this->showForm = false;
         $this->editingId = null;
-        $this->reset(['name', 'slug', 'shortDescription', 'description', 'durationMinutes', 'basePrice', 'icon', 'isActive', 'categoryId']);
+        $this->reset(['name', 'slug', 'shortDescription', 'description', 'durationMinutes', 'basePrice', 'pricePerHour', 'minHours', 'maxHours', 'hourIncrement', 'icon', 'instantAvailable', 'instantSurcharge', 'isActive', 'categoryId']);
         $this->isActive = true;
         $this->durationMinutes = 60;
+        $this->minHours = '1.0';
+        $this->maxHours = '8.0';
+        $this->hourIncrement = '0.5';
     }
 
     public function render()

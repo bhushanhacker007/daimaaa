@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Customer;
 
+use App\Jobs\DispatchDaimaaJob;
 use App\Models\Service;
 use App\Models\Package;
 use App\Models\AddOn;
 use App\Models\Booking;
 use App\Models\BookingItem;
+use App\Models\BookingSession;
 use App\Models\Coupon;
+use App\Services\GeocodingService;
 use Livewire\Component;
 
 class BookingWizard extends Component
@@ -17,8 +20,10 @@ class BookingWizard extends Component
     public string $bookingType = 'package';
     public ?int $selectedPackageId = null;
     public ?int $selectedServiceId = null;
+    public float $selectedHours = 1.0;
     public array $selectedAddOns = [];
     public ?int $selectedAddressId = null;
+    public string $scheduleMode = 'schedule'; // 'instant' or 'schedule'
     public string $scheduledDate = '';
     public string $scheduledTime = '';
     public string $couponCode = '';
@@ -73,6 +78,33 @@ class BookingWizard extends Component
     {
         $this->selectedServiceId = $id;
         $this->selectedPackageId = null;
+
+        $service = Service::find($id);
+        if ($service && $service->isHourlyPriced()) {
+            $this->selectedHours = (float) $service->min_hours;
+        } else {
+            $this->selectedHours = 1.0;
+        }
+    }
+
+    public function incrementHours()
+    {
+        $service = Service::find($this->selectedServiceId);
+        if (!$service || !$service->isHourlyPriced()) return;
+
+        $increment = (float) $service->hour_increment;
+        $max = (float) $service->max_hours;
+        $this->selectedHours = min($this->selectedHours + $increment, $max);
+    }
+
+    public function decrementHours()
+    {
+        $service = Service::find($this->selectedServiceId);
+        if (!$service || !$service->isHourlyPriced()) return;
+
+        $increment = (float) $service->hour_increment;
+        $min = (float) $service->min_hours;
+        $this->selectedHours = max($this->selectedHours - $increment, $min);
     }
 
     public function toggleAddOn(int $id)
@@ -119,17 +151,70 @@ class BookingWizard extends Component
         return '';
     }
 
+    public function getServicePrice(): float
+    {
+        if ($this->bookingType === 'service' && $this->selectedServiceId) {
+            $service = Service::find($this->selectedServiceId);
+            if ($service && $service->isHourlyPriced()) {
+                return $service->getPriceForHours($this->selectedHours);
+            }
+            return (float) ($service?->base_price ?? 0);
+        }
+        return 0;
+    }
+
+    public function getInstantSurcharge(): float
+    {
+        if ($this->scheduleMode !== 'instant') return 0;
+
+        if ($this->bookingType === 'service' && $this->selectedServiceId) {
+            $service = Service::find($this->selectedServiceId);
+            if ($service && $service->instant_available) {
+                return (float) ($service->instant_surcharge ?? 0);
+            }
+        }
+
+        if ($this->bookingType === 'package' && $this->selectedPackageId) {
+            $package = Package::find($this->selectedPackageId);
+            if ($package) {
+                $surcharge = 0;
+                foreach ($package->services as $svc) {
+                    if ($svc->instant_available) {
+                        $surcharge = max($surcharge, (float) ($svc->instant_surcharge ?? 0));
+                    }
+                }
+                return $surcharge;
+            }
+        }
+
+        return 0;
+    }
+
+    public function isInstantAvailable(): bool
+    {
+        if ($this->bookingType === 'service' && $this->selectedServiceId) {
+            $service = Service::find($this->selectedServiceId);
+            return $service && $service->instant_available;
+        }
+        if ($this->bookingType === 'package' && $this->selectedPackageId) {
+            $package = Package::find($this->selectedPackageId);
+            return $package && $package->services->contains(fn ($s) => $s->instant_available);
+        }
+        return false;
+    }
+
     public function getSubtotal(): float
     {
         $total = 0;
         if ($this->bookingType === 'package' && $this->selectedPackageId) {
             $total = (float) (Package::find($this->selectedPackageId)?->price ?? 0);
         } elseif ($this->selectedServiceId) {
-            $total = (float) (Service::find($this->selectedServiceId)?->base_price ?? 0);
+            $total = $this->getServicePrice();
         }
         foreach ($this->selectedAddOns as $id) {
             $total += (float) (AddOn::find($id)?->price ?? 0);
         }
+        $total += $this->getInstantSurcharge();
         return $total;
     }
 
@@ -177,19 +262,33 @@ class BookingWizard extends Component
             return;
         }
 
+        $bookedHours = null;
+        if ($this->bookingType === 'service' && $this->selectedServiceId) {
+            $svc = Service::find($this->selectedServiceId);
+            if ($svc && $svc->isHourlyPriced()) {
+                $bookedHours = $this->selectedHours;
+            }
+        }
+
+        $isInstant = $this->scheduleMode === 'instant';
+        $scheduledDate = $isInstant ? now()->toDateString() : $this->scheduledDate;
+        $scheduledTime = $isInstant ? now()->addMinutes(30)->format('H:i') : ($this->scheduledTime ?: null);
+
         $booking = Booking::create([
             'booking_number' => Booking::generateBookingNumber(),
             'customer_id' => $user->id,
             'package_id' => $this->bookingType === 'package' ? $this->selectedPackageId : null,
             'service_id' => $this->bookingType === 'service' ? $this->selectedServiceId : null,
+            'booked_hours' => $bookedHours,
+            'is_instant' => $isInstant,
             'address_id' => $addressId,
             'coupon_id' => $this->couponValid ? Coupon::where('code', strtoupper(trim($this->couponCode)))->first()?->id : null,
             'status' => 'pending',
             'subtotal' => $this->getSubtotal(),
             'discount_amount' => $this->getDiscount(),
             'total_amount' => $this->getTotal(),
-            'scheduled_date' => $this->scheduledDate,
-            'scheduled_time' => $this->scheduledTime ?: null,
+            'scheduled_date' => $scheduledDate,
+            'scheduled_time' => $scheduledTime,
             'notes' => $this->notes,
         ]);
 
@@ -211,8 +310,63 @@ class BookingWizard extends Component
             'from_status' => null,
             'to_status' => 'pending',
             'changed_by' => $user->id,
-            'notes' => 'Booking placed by customer.',
+            'notes' => $isInstant ? 'Instant booking placed — Daimaa expected within 30 minutes.' : 'Booking placed by customer.',
         ]);
+
+        if ($this->bookingType === 'package' && $this->selectedPackageId) {
+            $package = Package::with('services')->find($this->selectedPackageId);
+            if ($package) {
+                $sessionNumber = 1;
+                $firstSessionScheduledAt = $scheduledDate && $scheduledTime
+                    ? \Carbon\Carbon::parse("$scheduledDate $scheduledTime")
+                    : ($scheduledDate ? \Carbon\Carbon::parse($scheduledDate)->setHour(9) : null);
+
+                foreach ($package->services as $svc) {
+                    $count = $svc->pivot->session_count ?? 1;
+                    for ($i = 0; $i < $count; $i++) {
+                        $isFirstSession = $sessionNumber === 1;
+                        BookingSession::create([
+                            'booking_id' => $booking->id,
+                            'service_id' => $svc->id,
+                            'session_number' => $sessionNumber,
+                            'scheduled_at' => $isFirstSession ? $firstSessionScheduledAt : null,
+                            'status' => $isFirstSession && $firstSessionScheduledAt ? 'scheduled' : 'upcoming',
+                        ]);
+                        $sessionNumber++;
+                    }
+                }
+            }
+        } elseif ($this->bookingType === 'service' && $this->selectedServiceId) {
+            $scheduledAt = $scheduledDate && $scheduledTime
+                ? \Carbon\Carbon::parse("$scheduledDate $scheduledTime")
+                : ($scheduledDate ? \Carbon\Carbon::parse($scheduledDate)->setHour(9) : null);
+
+            BookingSession::create([
+                'booking_id' => $booking->id,
+                'service_id' => $this->selectedServiceId,
+                'session_number' => 1,
+                'scheduled_at' => $scheduledAt,
+                'status' => $scheduledAt ? 'scheduled' : 'upcoming',
+            ]);
+        }
+
+        // Geocode the address in the background (best-effort)
+        if ($booking->address && !$booking->address->latitude) {
+            $coords = GeocodingService::geocode(
+                $booking->address->address_line_1 ?? '',
+                $booking->address->pincode ?? '',
+                $booking->address->city?->name ?? ''
+            );
+            if ($coords) {
+                $booking->address->update($coords);
+            }
+        }
+
+        // Auto-dispatch: find and assign best available Daimaa
+        if (config('daimaa_matching.enabled', true)) {
+            $delay = $isInstant ? 0 : 5; // instant = immediate, scheduled = 5 sec buffer
+            DispatchDaimaaJob::dispatch($booking->id)->delay(now()->addSeconds($delay));
+        }
 
         session()->flash('success', 'Booking placed successfully! Booking #' . $booking->booking_number);
         return redirect()->route('customer.bookings');
@@ -234,11 +388,13 @@ class BookingWizard extends Component
                     'pincode.size' => 'Pincode must be 6 digits.',
                 ])
                 : $this->validate(['selectedAddressId' => 'required|exists:addresses,id'], ['selectedAddressId.required' => 'Please select an address.']),
-            4 => $this->validate([
-                'scheduledDate' => 'required|date|after:today',
-            ], [
-                'scheduledDate.after' => 'Please select a future date.',
-            ]),
+            4 => $this->scheduleMode === 'instant'
+                ? null
+                : $this->validate([
+                    'scheduledDate' => 'required|date|after:today',
+                ], [
+                    'scheduledDate.after' => 'Please select a future date.',
+                ]),
             default => null,
         };
     }

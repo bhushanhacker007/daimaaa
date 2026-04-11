@@ -45,16 +45,24 @@ class ManageBookings extends Component
             'assigned_at' => now(),
         ]);
 
-        $sessionsToCreate = $booking->package ? $booking->package->total_sessions : 1;
-        for ($i = 1; $i <= $sessionsToCreate; $i++) {
-            BookingSession::create([
-                'booking_id' => $booking->id,
-                'daimaa_id' => $this->selectedDaimaaId,
-                'session_number' => $i,
-                'scheduled_at' => $booking->scheduled_date->addDays($i - 1),
-                'status' => 'upcoming',
-            ]);
+        $existingSessions = $booking->sessions()->count();
+
+        if ($existingSessions > 0) {
+            $booking->sessions()->update(['daimaa_id' => $this->selectedDaimaaId]);
+        } else {
+            $sessionsToCreate = $booking->package ? $booking->package->total_sessions : 1;
+            for ($i = 1; $i <= $sessionsToCreate; $i++) {
+                BookingSession::create([
+                    'booking_id' => $booking->id,
+                    'daimaa_id' => $this->selectedDaimaaId,
+                    'session_number' => $i,
+                    'scheduled_at' => $booking->scheduled_date->addDays($i - 1),
+                    'status' => 'upcoming',
+                ]);
+            }
         }
+
+        $booking->sessions()->whereNull('start_otp')->each(fn (BookingSession $s) => $s->generateOtp());
 
         $this->updateStatus($booking->id, 'assigned');
         $this->assignDaimaaBookingId = null;

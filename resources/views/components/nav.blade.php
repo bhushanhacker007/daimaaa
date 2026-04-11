@@ -84,7 +84,19 @@
 
         <div class="pt-2 space-y-2">
             @auth
-                <a href="{{ route($dashRoute ?? 'customer.dashboard') }}" class="block btn-primary text-sm text-center">{{ __('Dashboard') }}</a>
+                @php $mobileDashRoute = match(Auth::user()->role) {
+                    'admin', 'super_admin' => 'admin.dashboard',
+                    'daimaa' => 'daimaa.dashboard',
+                    default => 'customer.dashboard',
+                }; @endphp
+                <a href="{{ route($mobileDashRoute) }}" class="block btn-primary text-sm text-center">{{ __('Dashboard') }}</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium text-error rounded-xl hover:bg-error-container/30 transition-colors">
+                        <span class="material-symbols-outlined text-lg">logout</span>
+                        {{ __('Sign Out') }}
+                    </button>
+                </form>
             @else
                 <a href="{{ route('login') }}" class="block text-center px-4 py-3 text-sm font-medium text-primary rounded-xl hover:bg-surface-container transition-colors">{{ __('Sign In') }}</a>
                 <a href="{{ route('register') }}" class="block btn-primary text-sm text-center">{{ __('Book Now') }}</a>

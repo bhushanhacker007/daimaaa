@@ -63,4 +63,29 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class, 'customer_id');
     }
+
+    public function daimaaReviews()
+    {
+        return $this->hasMany(Review::class, 'daimaa_id');
+    }
+
+    public function serviceQualifications()
+    {
+        return $this->hasMany(DaimaaServiceQualification::class, 'daimaa_id');
+    }
+
+    public function assignedSessions()
+    {
+        return $this->hasMany(BookingSession::class, 'daimaa_id');
+    }
+
+    public function bookingAssignments()
+    {
+        return $this->hasMany(BookingAssignment::class, 'daimaa_id');
+    }
+
+    public function payouts()
+    {
+        return $this->hasMany(Payout::class, 'daimaa_id');
+    }
 }

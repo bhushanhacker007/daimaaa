@@ -3,6 +3,7 @@
     ['route' => 'admin.bookings', 'icon' => 'calendar_month', 'label' => 'Bookings'],
     ['route' => 'admin.customers', 'icon' => 'group', 'label' => 'Customers'],
     ['route' => 'admin.daimaas', 'icon' => 'diversity_2', 'label' => 'Daimaas'],
+    ['route' => 'admin.daimaa-skills', 'icon' => 'workspace_premium', 'label' => 'Daimaa Skills'],
     ['route' => 'admin.kyc', 'icon' => 'verified_user', 'label' => 'KYC Review'],
     ['route' => 'admin.services', 'icon' => 'spa', 'label' => 'Services'],
     ['route' => 'admin.packages', 'icon' => 'inventory_2', 'label' => 'Packages'],

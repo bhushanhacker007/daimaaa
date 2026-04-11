@@ -124,6 +124,10 @@
     background-clip: text;
 }
 
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* Section divider wave */
 .section-wave {
     position: relative;

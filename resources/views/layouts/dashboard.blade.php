@@ -56,6 +56,15 @@
                 <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
                     {{ $sidebar }}
                 </nav>
+                <div class="p-4">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="flex items-center gap-3 w-full px-4 py-3 text-sm text-error rounded-xl hover:bg-error-container/30 transition-colors">
+                            <span class="material-symbols-outlined text-xl">logout</span>
+                            {{ __('Sign Out') }}
+                        </button>
+                    </form>
+                </div>
             </aside>
 
             {{-- Main content --}}

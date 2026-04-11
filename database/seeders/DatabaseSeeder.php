@@ -9,6 +9,8 @@ use App\Models\ServiceCategory;
 use App\Models\Service;
 use App\Models\Package;
 use App\Models\AddOn;
+use App\Models\DaimaaServiceQualification;
+use App\Models\AvailabilitySlot;
 use App\Models\Faq;
 use App\Models\Testimonial;
 use Illuminate\Database\Seeder;
@@ -51,6 +53,30 @@ class DatabaseSeeder extends Seeder
             'bio' => 'Experienced Daimaa with 12 years of traditional maternal care expertise.',
             'status' => 'verified',
             'verified_at' => now(),
+            'service_area_pincodes' => ['400001', '400002', '400050', '400053', '400058', '400070'],
+            'home_latitude' => 19.0760,
+            'home_longitude' => 72.8777,
+            'reliability_score' => 95.00,
+        ]);
+
+        // Second demo Daimaa for dispatch ranking tests
+        $daimaa2 = User::create([
+            'name' => 'Kamla Devi',
+            'email' => 'kamla@example.com',
+            'phone' => '9876543212',
+            'role' => 'daimaa',
+            'password' => bcrypt('password'),
+            'email_verified_at' => now(),
+        ]);
+        $daimaa2->daimaaProfile()->create([
+            'years_of_experience' => 8,
+            'bio' => 'Dedicated Daimaa specializing in baby massage and mother care.',
+            'status' => 'verified',
+            'verified_at' => now(),
+            'service_area_pincodes' => ['400001', '400002', '400050', '400053'],
+            'home_latitude' => 19.0830,
+            'home_longitude' => 72.8900,
+            'reliability_score' => 88.00,
         ]);
 
         // Cities
@@ -77,13 +103,13 @@ class DatabaseSeeder extends Seeder
         $babyCare = ServiceCategory::create(['name' => 'Baby Care', 'slug' => 'baby-care', 'icon' => 'child_care', 'description' => 'Gentle traditional care for your newborn.', 'sort_order' => 2]);
         $comboCare = ServiceCategory::create(['name' => 'Mother & Baby Combo', 'slug' => 'combo-care', 'icon' => 'diversity_1', 'description' => 'Complete care for both mother and baby.', 'sort_order' => 3]);
 
-        // Services
-        Service::create(['category_id' => $motherCare->id, 'name' => 'Mother Massage', 'slug' => 'mother-massage', 'short_description' => 'Traditional full-body massage to restore strength and reduce post-delivery pain.', 'description' => 'A 60-minute traditional full-body massage using warm herbal oils. Designed to restore the mother\'s core energy, ease muscle tension, and promote recovery after delivery.', 'duration_minutes' => 60, 'base_price' => 1200, 'icon' => 'spa', 'sort_order' => 1]);
+        // Services (price_per_hour enables hourly booking for individual services)
+        Service::create(['category_id' => $motherCare->id, 'name' => 'Mother Massage', 'slug' => 'mother-massage', 'short_description' => 'Traditional full-body massage to restore strength and reduce post-delivery pain.', 'description' => 'A 60-minute traditional full-body massage using warm herbal oils. Designed to restore the mother\'s core energy, ease muscle tension, and promote recovery after delivery.', 'duration_minutes' => 60, 'base_price' => 1200, 'price_per_hour' => 500, 'min_hours' => 1.0, 'max_hours' => 4.0, 'icon' => 'spa', 'sort_order' => 1]);
         Service::create(['category_id' => $motherCare->id, 'name' => 'Post-Pregnancy Belly Binding', 'slug' => 'belly-binding', 'short_description' => 'Traditional belly wrapping technique for postpartum recovery.', 'description' => 'Ancient belly binding technique using soft cotton cloth. Supports abdominal muscles, improves posture, and aids the uterus in returning to its original size.', 'duration_minutes' => 30, 'base_price' => 600, 'icon' => 'healing', 'sort_order' => 2]);
-        Service::create(['category_id' => $babyCare->id, 'name' => 'Baby Massage', 'slug' => 'baby-massage', 'short_description' => 'Gentle traditional massage to strengthen your baby\'s muscles and bones.', 'description' => 'A gentle 30-minute oil massage for newborns. Strengthens bones, improves blood circulation, promotes better sleep, and builds a loving bond through the healing touch of a Daimaa.', 'duration_minutes' => 30, 'base_price' => 800, 'icon' => 'self_improvement', 'sort_order' => 3]);
+        Service::create(['category_id' => $babyCare->id, 'name' => 'Baby Massage', 'slug' => 'baby-massage', 'short_description' => 'Gentle traditional massage to strengthen your baby\'s muscles and bones.', 'description' => 'A gentle 30-minute oil massage for newborns. Strengthens bones, improves blood circulation, promotes better sleep, and builds a loving bond through the healing touch of a Daimaa.', 'duration_minutes' => 30, 'base_price' => 800, 'price_per_hour' => 400, 'min_hours' => 1.0, 'max_hours' => 3.0, 'icon' => 'self_improvement', 'sort_order' => 3]);
         Service::create(['category_id' => $babyCare->id, 'name' => 'Baby Bath', 'slug' => 'baby-bath', 'short_description' => 'Safe and soothing traditional bathing ritual for your newborn.', 'description' => 'A carefully administered warm bath for the baby using mild natural products. Includes proper handling, gentle cleansing, and post-bath moisturizing and swaddling.', 'duration_minutes' => 30, 'base_price' => 600, 'icon' => 'bathtub', 'sort_order' => 4]);
-        Service::create(['category_id' => $comboCare->id, 'name' => 'Mother & Baby Combo Session', 'slug' => 'mother-baby-combo', 'short_description' => 'Complete care session covering both mother and baby in one visit.', 'description' => 'A comprehensive 90-minute session that includes mother massage, baby massage, and baby bath. The most popular choice for families wanting complete care in a single visit.', 'duration_minutes' => 90, 'base_price' => 2200, 'icon' => 'diversity_1', 'sort_order' => 5]);
-        Service::create(['category_id' => $motherCare->id, 'name' => 'Herbal Steam Bath', 'slug' => 'herbal-steam-bath', 'short_description' => 'Therapeutic herbal steam to detoxify and rejuvenate.', 'description' => 'A traditional herbal steam therapy using neem, turmeric, and other Ayurvedic herbs. Helps detoxify the body, open pores, and promote overall well-being during recovery.', 'duration_minutes' => 45, 'base_price' => 900, 'icon' => 'local_florist', 'sort_order' => 6]);
+        Service::create(['category_id' => $comboCare->id, 'name' => 'Mother & Baby Combo Session', 'slug' => 'mother-baby-combo', 'short_description' => 'Complete care session covering both mother and baby in one visit.', 'description' => 'A comprehensive 90-minute session that includes mother massage, baby massage, and baby bath. The most popular choice for families wanting complete care in a single visit.', 'duration_minutes' => 90, 'base_price' => 2200, 'price_per_hour' => 800, 'min_hours' => 1.5, 'max_hours' => 5.0, 'icon' => 'diversity_1', 'sort_order' => 5]);
+        Service::create(['category_id' => $motherCare->id, 'name' => 'Herbal Steam Bath', 'slug' => 'herbal-steam-bath', 'short_description' => 'Therapeutic herbal steam to detoxify and rejuvenate.', 'description' => 'A traditional herbal steam therapy using neem, turmeric, and other Ayurvedic herbs. Helps detoxify the body, open pores, and promote overall well-being during recovery.', 'duration_minutes' => 45, 'base_price' => 900, 'price_per_hour' => 600, 'min_hours' => 1.0, 'max_hours' => 2.0, 'icon' => 'local_florist', 'sort_order' => 6]);
 
         // Packages
         $p1 = Package::create(['name' => 'Essential Care', 'slug' => 'essential-care', 'description' => 'Perfect for first-time mothers. 10 sessions of foundational care.', 'total_sessions' => 10, 'price' => 9999, 'discount_percent' => 15, 'is_featured' => true, 'sort_order' => 1]);
@@ -120,5 +146,38 @@ class DatabaseSeeder extends Seeder
         Testimonial::create(['name' => 'Meera Patel', 'content' => 'After my C-section, I was in so much pain. The mother massage sessions were a blessing. My Daimaa knew exactly where the tension was and worked on it with such care.', 'city' => 'Pune', 'rating' => 5, 'is_featured' => true]);
         Testimonial::create(['name' => 'Kavitha Reddy', 'content' => 'I was skeptical at first, but the Sacred 40 Days package transformed my recovery. The traditional belly binding and daily massages made me feel like myself again so much faster.', 'city' => 'Bangalore', 'rating' => 5, 'is_featured' => true]);
         Testimonial::create(['name' => 'Sneha Gupta', 'content' => 'What I loved most was the trust factor. The Daimaa was verified, professional, and treated my home with respect. It felt like having a caring elder in the house.', 'city' => 'Delhi', 'rating' => 5, 'is_featured' => true]);
+
+        // Daimaa Service Qualifications — Savita Bai (all services)
+        $allServiceIds = Service::pluck('id');
+        foreach ($allServiceIds as $sid) {
+            DaimaaServiceQualification::create([
+                'daimaa_id' => $daimaa->id,
+                'service_id' => $sid,
+                'is_qualified' => true,
+            ]);
+        }
+
+        // Kamla Devi — qualified for mother massage, baby massage, baby bath
+        $kamlaServices = Service::whereIn('slug', ['mother-massage', 'baby-massage', 'baby-bath'])->pluck('id');
+        foreach ($kamlaServices as $sid) {
+            DaimaaServiceQualification::create([
+                'daimaa_id' => $daimaa2->id,
+                'service_id' => $sid,
+                'is_qualified' => true,
+            ]);
+        }
+
+        // Availability Slots — both Daimaas available Mon-Sat 7am-7pm
+        foreach ([$daimaa->id, $daimaa2->id] as $did) {
+            for ($day = 1; $day <= 6; $day++) {
+                AvailabilitySlot::create([
+                    'daimaa_id' => $did,
+                    'day_of_week' => $day,
+                    'start_time' => '07:00',
+                    'end_time' => '19:00',
+                    'is_available' => true,
+                ]);
+            }
+        }
     }
 }

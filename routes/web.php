@@ -69,6 +69,7 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
     Route::get('/dashboard', fn () => view('admin.dashboard'))->name('dashboard');
     Route::get('/customers', fn () => view('admin.customers'))->name('customers');
     Route::get('/daimaas', fn () => view('admin.daimaas'))->name('daimaas');
+    Route::get('/daimaa-skills', fn () => view('admin.daimaa-skills'))->name('daimaa-skills');
     Route::get('/kyc', fn () => view('admin.kyc'))->name('kyc');
     Route::get('/services', fn () => view('admin.services'))->name('services');
     Route::get('/packages', fn () => view('admin.packages'))->name('packages');

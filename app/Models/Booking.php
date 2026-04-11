@@ -10,8 +10,8 @@ class Booking extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'booking_number', 'customer_id', 'package_id', 'service_id', 'address_id',
-        'coupon_id', 'status', 'subtotal', 'discount_amount', 'total_amount',
+        'booking_number', 'customer_id', 'package_id', 'service_id', 'booked_hours', 'is_instant',
+        'address_id', 'coupon_id', 'status', 'subtotal', 'discount_amount', 'total_amount',
         'scheduled_date', 'scheduled_time', 'notes', 'cancellation_reason',
         'confirmed_at', 'completed_at', 'cancelled_at',
     ];
@@ -22,6 +22,8 @@ class Booking extends Model
             'subtotal' => 'decimal:2',
             'discount_amount' => 'decimal:2',
             'total_amount' => 'decimal:2',
+            'booked_hours' => 'decimal:1',
+            'is_instant' => 'boolean',
             'scheduled_date' => 'date',
             'confirmed_at' => 'datetime',
             'completed_at' => 'datetime',
