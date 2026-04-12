@@ -7,6 +7,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "cashfree/cashfree-payout": "^0.0.11",
+        "cashfree/cashfree-verification": "^3.0",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0",
         "livewire/livewire": "^4.2"

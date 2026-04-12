@@ -5,7 +5,9 @@ namespace App\Livewire\Admin;
 use App\Models\BookingSession;
 use App\Models\Payout;
 use App\Models\User;
+use App\Services\CashfreeService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -107,7 +109,41 @@ class ManagePayouts extends Component
         $this->closeGenerateModal();
     }
 
-    public function markProcessed(int $payoutId)
+    public function processCashfreePayout(int $payoutId)
+    {
+        $payout = Payout::with('daimaa.daimaaProfile')->findOrFail($payoutId);
+        $profile = $payout->daimaa?->daimaaProfile;
+
+        if (!$profile || !$profile->bank_account_number) {
+            session()->flash('error', 'Daimaa bank details missing. Cannot process payout.');
+            return;
+        }
+
+        try {
+            $service = app(CashfreeService::class);
+
+            if (!$profile->cashfree_beneficiary_id) {
+                $beneResult = $service->addBeneficiary($profile);
+                if (!$beneResult['success']) {
+                    session()->flash('error', 'Failed to add beneficiary: ' . ($beneResult['message'] ?? 'Unknown error'));
+                    return;
+                }
+            }
+
+            $result = $service->initiateTransfer($payout);
+
+            if ($result['success']) {
+                session()->flash('success', "Payout #{$payoutId} submitted to Cashfree. Transfer ID: " . $result['transfer_id']);
+            } else {
+                session()->flash('error', 'Transfer failed: ' . ($result['message'] ?? 'Unknown error'));
+            }
+        } catch (\Throwable $e) {
+            Log::error('Cashfree payout error', ['payout_id' => $payoutId, 'error' => $e->getMessage()]);
+            session()->flash('error', 'Payout processing failed: ' . $e->getMessage());
+        }
+    }
+
+    public function markProcessedManual(int $payoutId)
     {
         $payout = Payout::findOrFail($payoutId);
         $payout->update([
@@ -116,7 +152,38 @@ class ManagePayouts extends Component
             'reference' => 'MANUAL-' . strtoupper(substr(md5(now() . $payoutId), 0, 8)),
         ]);
 
-        session()->flash('success', "Payout #{$payoutId} marked as processed.");
+        session()->flash('success', "Payout #{$payoutId} marked as processed (manual).");
+    }
+
+    public function checkTransferStatus(int $payoutId)
+    {
+        $payout = Payout::findOrFail($payoutId);
+        if (!$payout->reference || !str_starts_with($payout->reference, 'PAY_')) {
+            session()->flash('error', 'No Cashfree transfer reference found.');
+            return;
+        }
+
+        $service = app(CashfreeService::class);
+        $result = $service->getTransferStatus($payout->reference);
+
+        if ($result['success']) {
+            $cfStatus = strtolower($result['status'] ?? '');
+            $newStatus = match (true) {
+                in_array($cfStatus, ['success', 'completed']) => 'processed',
+                in_array($cfStatus, ['failed', 'reversed', 'rejected']) => 'failed',
+                default => 'processing',
+            };
+
+            $payout->update([
+                'status' => $newStatus,
+                'processed_at' => $newStatus === 'processed' ? now() : $payout->processed_at,
+                'notes' => 'CF Status: ' . ($result['status'] ?? '—') . ($result['utr'] ? ' | UTR: ' . $result['utr'] : ''),
+            ]);
+
+            session()->flash('success', "Transfer status: {$result['status']}");
+        } else {
+            session()->flash('error', 'Could not fetch status: ' . ($result['message'] ?? 'Unknown'));
+        }
     }
 
     public function markFailed(int $payoutId)

@@ -87,6 +87,7 @@
                                 {{ match($p->status) {
                                     'processed' => 'bg-secondary-container/50 text-secondary',
                                     'pending' => 'bg-tertiary-fixed/30 text-tertiary',
+                                    'processing' => 'bg-primary-fixed/30 text-primary',
                                     'failed' => 'bg-error-container/50 text-error',
                                     default => 'bg-surface-container text-on-surface-variant',
                                 } }}">
@@ -94,21 +95,40 @@
                             </span>
                         </td>
                         <td class="px-4 py-3 text-xs text-on-surface-variant">{{ $p->reference ?? '—' }}</td>
-                        <td class="px-4 py-3 space-x-1">
-                            @if($p->status === 'pending')
-                                <button wire:click="markProcessed({{ $p->id }})"
-                                    wire:confirm="Mark this payout as processed/paid?"
-                                    class="text-xs text-secondary font-medium hover:underline">Pay</button>
-                                <button wire:click="markFailed({{ $p->id }})"
-                                    wire:confirm="Mark this payout as failed?"
-                                    class="text-xs text-error font-medium hover:underline">Fail</button>
-                            @elseif($p->status === 'failed')
-                                <button wire:click="markProcessed({{ $p->id }})"
-                                    wire:confirm="Retry and mark as processed?"
-                                    class="text-xs text-primary font-medium hover:underline">Retry</button>
-                            @else
-                                <span class="text-xs text-on-surface-variant/40">Done</span>
-                            @endif
+                        <td class="px-4 py-3">
+                            <div class="flex flex-wrap gap-1">
+                                @if($p->status === 'pending')
+                                    <button wire:click="processCashfreePayout({{ $p->id }})"
+                                        wire:confirm="Transfer via Cashfree Payouts?"
+                                        wire:loading.attr="disabled"
+                                        class="text-xs px-2.5 py-1 rounded-lg bg-primary/10 text-primary font-bold hover:bg-primary/20 transition-colors">
+                                        <span wire:loading.remove wire:target="processCashfreePayout({{ $p->id }})">Cashfree Pay</span>
+                                        <span wire:loading wire:target="processCashfreePayout({{ $p->id }})">...</span>
+                                    </button>
+                                    <button wire:click="markProcessedManual({{ $p->id }})"
+                                        wire:confirm="Mark paid manually (no bank transfer)?"
+                                        class="text-xs px-2.5 py-1 rounded-lg bg-secondary-container/50 text-secondary font-bold hover:bg-secondary-container transition-colors">Manual</button>
+                                    <button wire:click="markFailed({{ $p->id }})"
+                                        wire:confirm="Mark this payout as failed?"
+                                        class="text-xs px-2.5 py-1 rounded-lg bg-error/10 text-error font-bold hover:bg-error/20 transition-colors">Fail</button>
+                                @elseif($p->status === 'processing')
+                                    <button wire:click="checkTransferStatus({{ $p->id }})"
+                                        wire:loading.attr="disabled"
+                                        class="text-xs px-2.5 py-1 rounded-lg bg-tertiary/10 text-tertiary font-bold hover:bg-tertiary/20 transition-colors">
+                                        <span wire:loading.remove wire:target="checkTransferStatus({{ $p->id }})">Check Status</span>
+                                        <span wire:loading wire:target="checkTransferStatus({{ $p->id }})">...</span>
+                                    </button>
+                                @elseif($p->status === 'failed')
+                                    <button wire:click="processCashfreePayout({{ $p->id }})"
+                                        wire:confirm="Retry transfer via Cashfree?"
+                                        class="text-xs px-2.5 py-1 rounded-lg bg-primary/10 text-primary font-bold hover:bg-primary/20 transition-colors">Retry</button>
+                                    <button wire:click="markProcessedManual({{ $p->id }})"
+                                        wire:confirm="Mark paid manually?"
+                                        class="text-xs px-2.5 py-1 rounded-lg bg-secondary-container/50 text-secondary font-bold">Manual</button>
+                                @else
+                                    <span class="text-xs text-on-surface-variant/40 px-2">Done</span>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @empty

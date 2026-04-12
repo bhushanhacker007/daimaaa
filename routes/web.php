@@ -32,6 +32,10 @@ Route::get('/privacy-policy', [PublicController::class, 'privacy'])->name('priva
 Route::get('/terms', [PublicController::class, 'terms'])->name('terms');
 Route::get('/refund-policy', [PublicController::class, 'refundPolicy'])->name('refund-policy');
 
+// Cashfree Webhooks (no auth, no CSRF)
+Route::post('/webhooks/cashfree/payout', [\App\Http\Controllers\CashfreeWebhookController::class, 'handlePayout'])
+    ->name('webhooks.cashfree.payout');
+
 // Auth routes
 require __DIR__.'/auth.php';
 

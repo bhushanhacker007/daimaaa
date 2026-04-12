@@ -93,6 +93,7 @@
                         </div>
                     </td>
                 </tr>
+                @endif
                 @empty
                 <tr><td colspan="8" class="px-4 py-8 text-center text-on-surface-variant">No bookings found.</td></tr>
                 @endforelse
