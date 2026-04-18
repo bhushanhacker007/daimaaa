@@ -8,6 +8,19 @@
         </div>
     @endif
 
+    {{-- Page action bar --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+        <div>
+            <h2 class="text-lg font-headline font-bold text-on-surface">All Daimaas</h2>
+            <p class="text-sm text-on-surface-variant">Search, filter, verify, suspend, or onboard new caregivers.</p>
+        </div>
+        <a href="{{ route('admin.daimaas.onboard') }}"
+            class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-primary text-on-primary font-bold text-sm shadow-md hover:opacity-90 transition-all">
+            <span class="material-symbols-outlined text-lg">person_add</span>
+            Onboard New Daimaa
+        </a>
+    </div>
+
     {{-- Stat Cards --}}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div class="bg-surface-container-lowest rounded-2xl p-5 border border-outline/10">

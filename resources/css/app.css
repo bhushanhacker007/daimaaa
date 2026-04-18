@@ -5,10 +5,13 @@
 @layer base {
     html {
         scroll-behavior: smooth;
+        overflow-x: hidden;
     }
     body {
         @apply font-body text-on-surface leading-relaxed;
         -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        max-width: 100vw;
     }
     ::selection {
         @apply bg-primary-fixed-dim text-on-primary-fixed;
@@ -17,13 +20,13 @@
 
 @layer components {
     .btn-primary {
-        @apply inline-flex items-center justify-center px-6 py-3 cta-gradient text-on-primary font-semibold rounded-full transition-all duration-300 hover:shadow-ambient hover:scale-[1.02] active:scale-[0.98];
+        @apply inline-flex items-center justify-center px-6 py-3 cta-gradient text-on-primary font-semibold rounded-full spring-transition hover:shadow-ambient hover:scale-[1.02] active:scale-[0.98];
     }
     .btn-secondary {
-        @apply inline-flex items-center justify-center px-6 py-3 bg-secondary-container text-on-secondary-fixed-variant font-semibold rounded-full transition-all duration-300 hover:shadow-ambient;
+        @apply inline-flex items-center justify-center px-6 py-3 bg-secondary-container text-on-secondary-fixed-variant font-semibold rounded-full spring-transition hover:shadow-ambient;
     }
     .btn-outline {
-        @apply inline-flex items-center justify-center px-6 py-3 ghost-border text-primary font-semibold rounded-full transition-all duration-300 hover:bg-surface-container;
+        @apply inline-flex items-center justify-center px-6 py-3 ghost-border text-primary font-semibold rounded-full spring-transition hover:bg-surface-container;
     }
     .card {
         @apply bg-surface-container-lowest rounded-2xl p-6 ambient-shadow;
@@ -40,6 +43,65 @@
     .input-field:focus {
         box-shadow: 0 4px 12px -4px rgba(147, 69, 45, 0.1);
     }
+
+    /* === Editorial eyebrow tag === */
+    .eyebrow {
+        @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] sm:text-[11px] uppercase tracking-[0.22em] font-semibold;
+    }
+    .eyebrow-primary {
+        @apply eyebrow bg-primary-fixed/40 text-primary;
+    }
+    .eyebrow-tertiary {
+        @apply eyebrow bg-tertiary-fixed/40 text-tertiary;
+    }
+    .eyebrow-secondary {
+        @apply eyebrow bg-secondary-container text-on-secondary-container;
+    }
+
+    /* === Double-Bezel: nested architecture per soft-skill ===
+       Outer shell (subtle ring) wrapping Inner core (content surface).
+       Concentric radii produce a "machined hardware" feel without harsh borders. */
+    .bezel-shell {
+        @apply relative rounded-[2rem] p-1.5 bg-surface-container/60;
+        border: 1px solid rgba(218, 193, 186, 0.18);
+    }
+    .bezel-core {
+        @apply rounded-[1.625rem] bg-surface-container-lowest p-6 sm:p-8;
+        box-shadow: inset 0 1px 0 rgba(255, 252, 247, 0.6);
+    }
+    .bezel-shell-lg {
+        @apply relative rounded-[2.5rem] p-2 bg-surface-container/60;
+        border: 1px solid rgba(218, 193, 186, 0.18);
+    }
+    .bezel-core-lg {
+        @apply rounded-[2.125rem] bg-surface-container-lowest p-8 sm:p-10;
+        box-shadow: inset 0 1px 0 rgba(255, 252, 247, 0.6);
+    }
+
+    /* === Island button — button-in-button trailing icon === */
+    .btn-island-icon {
+        @apply inline-flex h-8 w-8 items-center justify-center rounded-full bg-on-primary/15 spring-transition;
+    }
+    .btn-primary:hover .btn-island-icon,
+    .group:hover .btn-island-icon {
+        @apply scale-105 -translate-y-[1px];
+        background-color: rgba(255, 255, 255, 0.25);
+    }
+    .btn-island-icon-dark {
+        @apply inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 spring-transition;
+    }
+    .group:hover .btn-island-icon-dark {
+        @apply scale-105 -translate-y-[1px] bg-primary/20;
+    }
+}
+
+/* === Premium spring transition (cubic-bezier, no linear easing) === */
+.spring-transition {
+    transition: transform 600ms cubic-bezier(0.32, 0.72, 0, 1),
+                box-shadow 600ms cubic-bezier(0.32, 0.72, 0, 1),
+                background-color 400ms cubic-bezier(0.32, 0.72, 0, 1),
+                color 400ms cubic-bezier(0.32, 0.72, 0, 1),
+                opacity 400ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .material-symbols-outlined {
@@ -62,11 +124,12 @@
     animation: fadeSlideIn 0.35s ease-out;
 }
 
-/* Scroll-reveal animations */
+/* === Scroll-reveal animations (already used by parallax.js) === */
 [data-reveal] {
     opacity: 0;
     transform: translateY(32px);
-    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: blur(6px);
 }
 [data-reveal="left"] {
     transform: translateX(-40px);
@@ -80,9 +143,10 @@
 [data-reveal].revealed {
     opacity: 1;
     transform: translate(0, 0) scale(1);
+    filter: blur(0);
 }
 
-/* WebGL hero canvas */
+/* === WebGL hero canvas === */
 .hero-webgl-canvas {
     position: absolute;
     inset: 0;
@@ -95,7 +159,7 @@
     height: 100% !important;
 }
 
-/* Parallax decorative blobs */
+/* === Parallax decorative blobs === */
 .parallax-blob {
     position: absolute;
     border-radius: 50%;
@@ -104,7 +168,7 @@
     will-change: transform;
 }
 
-/* Floating animation for decorative elements */
+/* === Floating animation for decorative elements === */
 @keyframes floatSlow {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-20px) rotate(3deg); }
@@ -116,7 +180,7 @@
 .animate-float-slow { animation: floatSlow 8s ease-in-out infinite; }
 .animate-float-medium { animation: floatMedium 5s ease-in-out infinite; }
 
-/* Gradient text helper */
+/* === Gradient text helper === */
 .text-gradient-primary {
     background: linear-gradient(135deg, #93452d, #b25d43, #f3bf37);
     -webkit-background-clip: text;
@@ -124,11 +188,11 @@
     background-clip: text;
 }
 
-/* Hide scrollbar utility */
+/* === Hide scrollbar utility === */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Section divider wave */
+/* === Section divider wave === */
 .section-wave {
     position: relative;
     overflow: hidden;
@@ -142,4 +206,116 @@
     height: 60px;
     background: inherit;
     clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+/* === The Care Progress Arch — signature component per DESIGN.md ===
+   Semi-circular gold-stroke arch. Path is drawn on scroll-reveal. */
+.care-arch {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+.care-arch-track {
+    fill: none;
+    stroke: rgba(218, 193, 186, 0.35);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+.care-arch-progress {
+    fill: none;
+    stroke: #f3bf37;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 1200;
+    stroke-dashoffset: 1200;
+    transition: stroke-dashoffset 2.4s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 2px 8px rgba(243, 191, 55, 0.25));
+}
+[data-reveal].revealed .care-arch-progress {
+    stroke-dashoffset: 0;
+}
+.care-arch-milestone {
+    fill: #fef8f3;
+    stroke: #93452d;
+    stroke-width: 2;
+    transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+    transform-origin: center;
+    transform-box: fill-box;
+}
+.care-arch-milestone:hover {
+    transform: scale(1.15);
+}
+
+/* === Soft Arch motif behind hero — borrows the logo "D" curvature === */
+.soft-arch {
+    position: absolute;
+    pointer-events: none;
+    border: 1px solid rgba(147, 69, 45, 0.08);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+/* === Marquee for testimonials horizontal stream === */
+@keyframes marqueeSlide {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+.marquee-mask {
+    position: relative;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+}
+.marquee-track {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    animation: marqueeSlide 50s linear infinite;
+    will-change: transform;
+}
+.marquee-mask:hover .marquee-track {
+    animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+}
+
+/* === Bento grid hover lift (replaces generic shadow-lg pop) === */
+.bento-card {
+    transition: transform 700ms cubic-bezier(0.32, 0.72, 0, 1),
+                box-shadow 700ms cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+}
+.bento-card:hover {
+    transform: translateY(-4px);
+}
+
+/* === Subtle film-grain overlay for editorial luxury feel ===
+   Fixed, pointer-events:none, z-50 — per taste-skill performance rule */
+.film-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.025;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* === Editorial drop-cap for featured quotes === */
+.drop-cap::first-letter {
+    float: left;
+    font-family: 'Noto Serif', serif;
+    font-size: 4.5rem;
+    line-height: 0.85;
+    padding: 0.4rem 0.6rem 0 0;
+    color: #93452d;
+    font-weight: 700;
+}
+
+/* === Tonal divider (no 1px lines per DESIGN.md "No-Line" Rule) ===
+   Uses a vertical surface-shift wedge instead of a border */
+.tonal-divider {
+    width: 1px;
+    align-self: stretch;
+    background: linear-gradient(to bottom, transparent, rgba(218, 193, 186, 0.4), transparent);
 }
